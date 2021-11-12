@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
     marginTop: '10',
   },
   urlInput: {
-    margin: theme.spacing(1),
+    margin: theme.spacing(2),
   },
   addSongButton: {
     margin: theme.spacing(1),
