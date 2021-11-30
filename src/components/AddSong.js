@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/img-redundant-alt */
 import {
   Dialog,
   DialogActions,
@@ -9,6 +10,9 @@ import {
 import { AddBoxOutlined, Link } from '@mui/icons-material'
 import { Button, InputAdornment } from '@mui/material'
 import React from 'react'
+import SoundcloudPlayer from 'react-player/lib/players/SoundCloud'
+import YouTubePlayer from 'react-player/lib/players/YouTube'
+import ReactPlayer from 'react-player'
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -32,11 +36,23 @@ const useStyles = makeStyles((theme) => ({
 
 const AddSong = () => {
   const classes = useStyles()
+  const [url, setUrl] = React.useState('')
+  const [playable, setPlayable] = React.useState(false)
   const [dialog, setDialog] = React.useState(false)
+
+  React.useEffect(() => {
+    const isPlayable =
+      SoundcloudPlayer.canPlay(url) || YouTubePlayer.canPlay(url)
+
+    setPlayable(isPlayable)
+  }, [url])
 
   function handleCloseDialog() {
     setDialog(false)
   }
+
+  function handleEditSong() {}
+
   return (
     <div className={classes.container}>
       <Dialog
@@ -72,6 +88,8 @@ const AddSong = () => {
       </Dialog>
       <TextField
         className={classes.urlInput}
+        onChange={(event) => setUrl(event.target.value)}
+        value={url}
         placeholder="Add YouTube or Soundcloud URL"
         fullWidth
         margin="normal"
@@ -85,6 +103,7 @@ const AddSong = () => {
         }}
       />
       <Button
+        disabled={!playable}
         className={classes.addSongButton}
         onClick={() => setDialog(true)}
         variant="contained"
@@ -93,6 +112,7 @@ const AddSong = () => {
       >
         Add
       </Button>
+      <ReactPlayer url={url} hidden onReady={handleEditSong} />
     </div>
   )
 }
